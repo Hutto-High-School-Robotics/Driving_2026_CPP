@@ -9,20 +9,44 @@
 #include "robot_config.h"
 #include "autonomous/autonomous.h"
 
-Autonomous autonomous;
+
+Drive driver = Drive(0, 1, 2);
+Autonomous autonomous = Autonomous(driver);
+
+// declare functions before calling them
+void handleLeft();
+void handleRight();
 
 int setupButtonConfig() { 
     Controller.ButtonX.pressed([]() {
-        autonomous.StartAutonomous();
+        autonomous.startAutonomous();
     });
+    Controller.ButtonRight.pressed(handleRight);
+    Controller.ButtonLeft.pressed(handleLeft);
     return 0;
 }
 
-int main() {
-    if (setupButtonConfig() == 1) {
-        
+void handleLeft() {
+    if (autonomous.inMenu()) {
+        autonomous.moveMenuLeft();
     }
-    Brain.Screen.printAt( 10, 50, "Hello V5" );
+}
+
+void handleRight() {
+    if (autonomous.inMenu()) {
+        autonomous.moveMenuRight();
+    }
+}
+
+int main() {
+    if (setupButtonConfig() == 0) {
+        Brain.Screen.print("WE ARE GOOD");
+    }
+    Brain.Screen.newLine();
+    Brain.Screen.print("Hello V5");
+    thread driveLoop = thread(Drive::beginDriveLoop);
+
+    Brain.Screen.print("AAAAAAAAAA");
    
     while(true) {
         // Allow other tasks to run
