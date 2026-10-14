@@ -3,7 +3,6 @@
 
 class Drive {
     private:
-        static Drive* instance;
         bool isPaused;
         motor55 leftDrive;
         motor55 rightDrive;
@@ -15,5 +14,4 @@ class Drive {
         void unpauseDrive();
         void beginManualDrive(int32_t speed);
         void stopManualDrive();
-        static void beginDriveLoop();
 };

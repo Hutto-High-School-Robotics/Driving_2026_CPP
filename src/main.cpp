@@ -44,7 +44,9 @@ int main() {
     }
     Brain.Screen.newLine();
     Brain.Screen.print("Hello V5");
-    thread driveLoop = thread(Drive::beginDriveLoop);
+    thread driveLoop = thread([]() {
+        driver.driveLoop();
+    });
 
     Brain.Screen.print("AAAAAAAAAA");
    
