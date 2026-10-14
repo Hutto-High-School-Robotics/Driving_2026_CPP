@@ -7,9 +7,21 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 #include "robot_config.h"
-#include "Autonomous/autonomous.h"
+#include "autonomous/autonomous.h"
+
+Autonomous autonomous;
+
+int setupButtonConfig() { 
+    Controller.ButtonX.pressed([]() {
+        autonomous.StartAutonomous();
+    });
+    return 0;
+}
 
 int main() {
+    if (setupButtonConfig() == 1) {
+        
+    }
     Brain.Screen.printAt( 10, 50, "Hello V5" );
    
     while(true) {
