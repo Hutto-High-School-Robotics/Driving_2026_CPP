@@ -1,6 +1,7 @@
 #pragma once
-#include "../robot_config.h"
-#include "../drive/drive.h"
+#include "robot_config.h"
+#include "drive.h"
+#include "tools.h"
 
 class Autonomous {
     private:

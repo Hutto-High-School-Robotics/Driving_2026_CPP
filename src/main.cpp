@@ -7,7 +7,8 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 #include "robot_config.h"
-#include "autonomous/autonomous.h"
+#include "autonomous.h"
+#include "tools.h"
 
 
 Drive driver = Drive(0, 1, 2);
@@ -27,15 +28,11 @@ int setupButtonConfig() {
 }
 
 void handleLeft() {
-    if (autonomous.inMenu()) {
-        autonomous.moveMenuLeft();
-    }
+    menu::moveMenuLeft();
 }
 
 void handleRight() {
-    if (autonomous.inMenu()) {
-        autonomous.moveMenuRight();
-    }
+    menu::moveMenuRight();
 }
 
 int main() {
