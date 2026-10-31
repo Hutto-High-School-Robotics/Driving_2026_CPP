@@ -10,17 +10,13 @@
 #include "autonomous.h"
 #include "tools.h"
 
-
-Drive driver = Drive(10, 11, 12);
-Autonomous autonomous = Autonomous(driver);
-
 // declare functions before calling them
 void handleLeft();
 void handleRight();
 
 int setupButtonConfig() { 
     Controller.ButtonX.pressed([]() {
-        autonomous.startAutonomous();
+        Autonomous::startAutonomous();
     });
     Controller.ButtonRight.pressed(handleRight);
     Controller.ButtonLeft.pressed(handleLeft);
@@ -42,7 +38,7 @@ int main() {
     Brain.Screen.newLine();
     Brain.Screen.print("Hello V5");
     thread driveLoop = thread([]() {
-        driver.driveLoop();
+        Drive::driveLoop();
     });
 
     Brain.Screen.print("AAAAAAAAAA");

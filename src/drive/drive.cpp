@@ -1,7 +1,5 @@
 #include "drive.h"
 
-Drive::Drive(int32_t leftDrivePort, int32_t rightDrivePort, int32_t inertialSensorPort) : leftDrive(leftDrivePort), rightDrive(rightDrivePort), inertialSensor(inertialSensorPort) {isPaused = false;}
-
 void Drive::driveLoop() {
     while (true) {
         if (!isPaused) {
@@ -9,6 +7,7 @@ void Drive::driveLoop() {
             rightDrive.spin(forward, 12.0 * (static_cast<double>(Controller.Axis2.position())) / 100.0, volt);
             printf("%f\n",12.0 * (static_cast<double>(Controller.Axis3.position())) / 100.0);
         }
+        vex::task::sleep(2);
     }
 }
 
