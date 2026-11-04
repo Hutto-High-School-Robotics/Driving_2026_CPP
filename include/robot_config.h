@@ -10,3 +10,5 @@ extern aivision aiVision;
 extern motor55 leftDrive;
 extern motor55 rightDrive;
 extern inertial inertialSensor;
+extern motor55 arm;
+extern servo claw;

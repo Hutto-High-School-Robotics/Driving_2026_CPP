@@ -5,7 +5,18 @@ void Drive::driveLoop() {
         if (!isPaused) {
             leftDrive.spin(forward, 12.0 * (static_cast<double>(Controller.Axis3.position())) / 100.0, volt);
             rightDrive.spin(forward, 12.0 * (static_cast<double>(Controller.Axis2.position())) / 100.0, volt);
-            printf("%f\n",12.0 * (static_cast<double>(Controller.Axis3.position())) / 100.0);
+            if (Controller.ButtonL1.pressing())
+            {
+                arm.spin(forward, 12.0, volt);
+            }
+            else if (Controller.ButtonL2.pressing())
+            {
+                arm.spin(reverse, 12.0, volt);
+            }
+            else
+            {
+                arm.stop();
+            }
         }
         vex::task::sleep(2);
     }
