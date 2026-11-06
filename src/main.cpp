@@ -16,7 +16,7 @@ void handleRight();
 
 int setupButtonConfig() { 
     Controller.ButtonX.pressed([]() {
-        Autonomous::startAutonomous();
+        //Autonomous::startAutonomous(); DON'T USE!!!
     });
     Controller.ButtonRight.pressed(handleRight);
     Controller.ButtonLeft.pressed(handleLeft);

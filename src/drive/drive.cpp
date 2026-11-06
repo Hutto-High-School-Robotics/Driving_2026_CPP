@@ -17,6 +17,20 @@ void Drive::driveLoop() {
             {
                 arm.stop();
             }
+            if (Controller.ButtonR1.pressing())
+            {
+                claw.setPosition(180, degrees);
+            }
+            else if (Controller.ButtonR2.pressing())
+            {
+                claw.setPosition(-180,degrees);
+            }
+        }
+        else
+        {
+            leftDrive.stop();
+            rightDrive.stop();
+            arm.stop();
         }
         vex::task::sleep(2);
     }
