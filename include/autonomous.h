@@ -3,7 +3,8 @@
 #include "drive.h"
 #include "tools.h"
 
-namespace Autonomous {
+namespace Autonomous
+{
     namespace
     {
         int32_t selectedFiducial;
@@ -12,7 +13,10 @@ namespace Autonomous {
         bool isInAutonomous;
         void SetupMenu();
         void UpdateMenu();
-    }
+    };
+    namespace internalNavigation
+    {
+    };
     void startAutonomous();
     void selectAutonomous();
     void cancelMenu();

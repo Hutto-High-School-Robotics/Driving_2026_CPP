@@ -5,6 +5,6 @@ bool Autonomous::inMenu() {
 }
 
 void Autonomous::startAutonomous() {
-    Drive::pauseDrive();
+    drive::pauseDrive();
     menu::enterMenu();
 }

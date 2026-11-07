@@ -8,4 +8,4 @@ namespace menu
     void exitMenu();
     void moveMenuLeft();
     void moveMenuRight();
-} // namespace menu
+}
