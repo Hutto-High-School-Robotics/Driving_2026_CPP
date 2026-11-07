@@ -20,11 +20,11 @@ location navigator::locate()
     const double sizeToDist{2.5}; // calculated using the idea: size decreases by 2x as distance increases by 2x, so size is 1/d.
     const double offset{0};
 
-    double cenX = aiVisionObjects[i][0];
-    double cenY = aiVisionObjects[i][1];
-    double width = aiVisionObjects[i][2];
-    double height = aiVisionObjects[i][3];
-    double angle = aiVisionObjects[i][4];
+    double cenX = aiVisionObjects[0][0];
+    double cenY = aiVisionObjects[0][1];
+    double width = aiVisionObjects[0][2];
+    double height = aiVisionObjects[0][3];
+    double angle = aiVisionObjects[0][4];
     // TODO: find the ratio of size to distance (our x)
     cenX += offset;
 
