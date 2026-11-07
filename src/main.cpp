@@ -7,11 +7,8 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 #include "robot_config.h"
-#include "autonomous/autonomous.h"
-
-
-Drive driver = Drive(0, 1, 2);
-Autonomous autonomous = Autonomous(driver);
+#include "autonomous.h"
+#include "tools.h"
 
 // declare functions before calling them
 void handleLeft();
@@ -19,7 +16,7 @@ void handleRight();
 
 int setupButtonConfig() { 
     Controller.ButtonX.pressed([]() {
-        autonomous.startAutonomous();
+        //Autonomous::startAutonomous(); DON'T USE!!!
     });
     Controller.ButtonRight.pressed(handleRight);
     Controller.ButtonLeft.pressed(handleLeft);
@@ -27,15 +24,11 @@ int setupButtonConfig() {
 }
 
 void handleLeft() {
-    if (autonomous.inMenu()) {
-        autonomous.moveMenuLeft();
-    }
+    menu::moveMenuLeft();
 }
 
 void handleRight() {
-    if (autonomous.inMenu()) {
-        autonomous.moveMenuRight();
-    }
+    menu::moveMenuRight();
 }
 
 int main() {
@@ -45,7 +38,7 @@ int main() {
     Brain.Screen.newLine();
     Brain.Screen.print("Hello V5");
     thread driveLoop = thread([]() {
-        driver.driveLoop();
+        drive::driveLoop();
     });
 
     Brain.Screen.print("AAAAAAAAAA");
