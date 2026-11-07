@@ -52,21 +52,5 @@ void drive::beginManualDrive(int32_t speed) {
 }
 
 void drive::turn(double degrees, double speed, vex::turnType dir) {
-    double currentDir = inertialSensor.heading(vex::rotationUnits::deg);
-    if (dir == right) {
-        double targetDir = currentDir + degrees;
-        while (!functools::isClose(currentDir, targetDir, 1)) {
-            vex::task::sleep(2);
-            leftDrive.spin(forward, ((double) speed / 100) * 12.0, volt);
-            rightDrive.spin(reverse, ((double) speed / 100) * 12.0, volt);
-            currentDir = inertialSensor.heading(vex::rotationUnits::deg);
-        }
-        speed /= 4;
-        while (!functools::isClose(currentDir, targetDir, 0.1)) {
-            vex::task::sleep(2);
-            leftDrive.spin(forward, ((double) speed / 100) * 12.0, volt);
-            rightDrive.spin(reverse, ((double) speed / 100) * 12.0, volt);
-            currentDir = inertialSensor.heading(vex::rotationUnits::deg);
-        }
-    }
+    // TODO: Turn Implementations
 }

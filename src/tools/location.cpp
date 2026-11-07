@@ -5,6 +5,11 @@ location::location(double x, double y, double rotationDegs) : X(x), Y(y), rotati
     isDegrees = true;
 }
 
+location::location(double x, double y) : X(x), Y(y), rotation(0.0)
+{
+    isDegrees = true;
+}
+
 double location::rotationDegrees() const
 {
     return isDegrees ? rotation : rotation * (M_PI/180.0);

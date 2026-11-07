@@ -5,6 +5,7 @@ class location
 {
 public:
     location(double x, double y, double rotationDegs);
+    location(double x, double y);
     ~location();
     const double X;
     const double Y;
