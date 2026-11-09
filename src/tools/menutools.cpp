@@ -83,4 +83,9 @@ namespace menu
             }
         }
     }
+
+    int getSelection()
+    {
+        return selectedFiducial;
+    }
 }

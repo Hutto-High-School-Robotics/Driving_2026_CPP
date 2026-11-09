@@ -10,3 +10,27 @@ void Autonomous::startAutonomous() {
     menu::enterMenu();
     Brain.Screen.print(navigator::locate().X);
 }
+
+bool Autonomous::isInDangerZone(location current)
+{
+    double sizeLists[2][3] {
+        {0, 1, 2},
+        {3, 4, 5}
+    };
+    for (size_t i{}; i < 2; ++i)
+    {
+        bool isX = i == 1;
+        
+        double curPos = isX ? current.X : current.Y; // if isX, then get x. If not, then get y.
+
+        for (auto warn : sizeLists[i])
+        {
+            if (functools::isClose(warn, curPos, robotSize))
+            {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}

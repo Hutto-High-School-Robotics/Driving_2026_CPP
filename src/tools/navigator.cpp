@@ -21,6 +21,7 @@ location navigator::locate()
     double avgX{};
     double avgY{};
     const double sizeToDist{2.5}; // calculated using the idea: size decreases by 2x as distance increases by 2x, so size is 1/d.
+    // TODO: GET ACCURATE MEASUREMENT LIKE ASAP
     const double offset{0}; // offset compared to center; calculates position. + is offset right, - is offset left.
 
     double cenX{};
@@ -36,6 +37,11 @@ location navigator::locate()
     TODO:
     GET PROPER FIELD MEASUREMENTS
     */
+   
+    size_t ind{};
+
+    double avgRot{};
+    // Begin the avg loop for each object
 
     for (size_t i{0}; i < aiVision.objectCount; ++i)
     {
@@ -73,58 +79,64 @@ location navigator::locate()
         height = aiVisionObjects[i][3];
         angle = aiVisionObjects[i][4];
         id = aiVisionObjects[i][5];
-        break;
-    }
+        cenX += offset;
 
-    cenX += offset;
-
-    double distX{0};
-    double distY{0};
-    // if center x is close to zero, then use this as the distance point.
-    if (functools::isClose(cenX, 0, 1))
-    {
-        distX = sizeToDist / width;
-    }
-    else
-    {
-        distX = sizeToDist / width;
-        double targ{width / 2.0};
-        double leftX{cenX};
-        const double centerScreen{160.0};
-        while (!functools::isClose(leftX, centerScreen, targ))
+        double distX{0};
+        double distY{0};
+        // if center x is close to zero, then use this as the distance point.
+        if (functools::isClose(cenX, 0, 1))
         {
-            if (leftX > centerScreen)
+            distX = sizeToDist / width;
+        }
+        else
+        // basically recenter ALL THE WAY until its close enough
+        {
+            distX = sizeToDist / width;
+            double targ{width / 2.0};
+            double leftX{cenX};
+            const double centerScreen{160.0};
+            while (!functools::isClose(leftX, centerScreen, targ))
             {
-                leftX -= width;
-                distY += width;
-                if (leftX < centerScreen)
+                if (leftX > centerScreen)
                 {
-                    leftX += width / 2.0;
-                    distY -= width / 2.0;
-                    if (leftX > centerScreen)
+                    leftX -= width;
+                    distY += width;
+                    if (leftX < centerScreen)
                     {
-                        leftX -= width / 4.0;
-                        distY += width / 4.0;
+                        leftX += width / 2.0;
+                        distY -= width / 2.0;
+                        if (leftX > centerScreen)
+                        {
+                            leftX -= width / 4.0;
+                            distY += width / 4.0;
+                        }
                     }
                 }
-            }
-            if (leftX < centerScreen)
-            {
-                leftX += width;
-                distY -= width;
                 if (leftX < centerScreen)
                 {
-                    leftX -= width / 2.0;
-                    distY += width / 2.0;
-                    if (leftX > centerScreen)
+                    leftX += width;
+                    distY -= width;
+                    if (leftX < centerScreen)
                     {
-                        leftX += width / 4.0;
-                        distY -= width / 4.0;
+                        leftX -= width / 2.0;
+                        distY += width / 2.0;
+                        if (leftX > centerScreen)
+                        {
+                            leftX += width / 4.0;
+                            distY -= width / 4.0;
+                        }
                     }
                 }
             }
         }
+
+        avgX += distX;
+        avgY += distY;
+        ++ind;
     }
 
-    return location(distX + xPosOffset, distY + yPosOffset, 180.0);
+    avgX /= ind;
+    avgY /= ind;
+
+    return location(avgX, avgY, 180.0);
 }

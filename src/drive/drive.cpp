@@ -31,7 +31,7 @@ void drive::driveLoop() {
             }
             else if(Controller.ButtonRight.pressing())
             {
-                holder.setPosition(180,degrees);
+                holder.setPosition(45,degrees);
             }
         }
         else
