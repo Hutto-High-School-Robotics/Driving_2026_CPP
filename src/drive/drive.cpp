@@ -7,11 +7,11 @@ void drive::driveLoop() {
             rightDrive.spin(forward, 12.0 * (static_cast<double>(Controller.Axis2.position())) / 100.0, volt);
             if (Controller.ButtonL1.pressing())
             {
-                arm.spin(forward, 12.0, volt);
+                arm.spin(reverse, 12.0, volt);
             }
             else if (Controller.ButtonL2.pressing())
             {
-                arm.spin(reverse, 12.0, volt);
+                arm.spin(forward, 12.0, volt);
             }
             else
             {
@@ -24,6 +24,14 @@ void drive::driveLoop() {
             else if (Controller.ButtonR2.pressing())
             {
                 claw.setPosition(-180,degrees);
+            }
+            if (Controller.ButtonLeft.pressing())
+            {
+                holder.setPosition(0,degrees);
+            }
+            else if(Controller.ButtonRight.pressing())
+            {
+                holder.setPosition(180,degrees);
             }
         }
         else

@@ -8,7 +8,7 @@ location navigator::locate()
     // we will use trig to get the location
     double aiVisionObjects[aiVision.objectCount][5];
     aiVision.takeSnapshot(aivision::ALL_TAGS);
-    for (int i{0}; i < aiVision.objectCount; ++i)
+    for (size_t i{0}; i < aiVision.objectCount; ++i)
     {
         auto obj = aiVision.objects[i];
         aiVisionObjects[i][0] = obj.centerX;
@@ -32,7 +32,12 @@ location navigator::locate()
     double xPosOffset{0};
     double yPosOffset{0};
 
-    for (int i{0}; i < aiVision.objectCount; ++i)
+    /*
+    TODO:
+    GET PROPER FIELD MEASUREMENTS
+    */
+
+    for (size_t i{0}; i < aiVision.objectCount; ++i)
     {
         switch(static_cast<int>(id))
         {
@@ -41,8 +46,25 @@ location navigator::locate()
             case 8:
                 continue; // no; we dont need id 0-8, those are tables.
                 // to be honest, if we saw table id, something went wrong lol
-            case 9:
-                xPosOffset = 200;
+                // or it detected it somehow. idk
+            case 9: case 16: // case 9 and 16 are equal
+                xPosOffset = 52;
+                break;
+            case 10: case 15: // case 10 and 15 are equal too
+                xPosOffset = 70;
+                break;
+            // wall 2
+            case 11: case 20:
+                yPosOffset = 16;
+                break;
+            case 12: case 19:
+                yPosOffset = 52;
+                break;
+            case 13: case 18:
+                yPosOffset = 70;
+                break;
+            case 14: case 17:
+                yPosOffset = 88;
                 break;
         }
         cenX = aiVisionObjects[i][0];
@@ -61,7 +83,7 @@ location navigator::locate()
     // if center x is close to zero, then use this as the distance point.
     if (functools::isClose(cenX, 0, 1))
     {
-        // use this for distance
+        distX = sizeToDist / width;
     }
     else
     {

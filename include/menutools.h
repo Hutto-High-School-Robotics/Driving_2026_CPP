@@ -8,4 +8,5 @@ namespace menu
     void exitMenu();
     void moveMenuLeft();
     void moveMenuRight();
+    int getSelection();
 }

@@ -24,11 +24,17 @@ int setupButtonConfig() {
 }
 
 void handleLeft() {
-    menu::moveMenuLeft();
+    if (drive::isPaused)
+    {
+        menu::moveMenuLeft();
+    }
 }
 
 void handleRight() {
-    menu::moveMenuRight();
+    if (drive::isPaused)
+    {
+        menu::moveMenuRight();
+    }
 }
 
 int main() {

@@ -11,3 +11,4 @@ extern motor55 leftDrive;
 extern motor55 rightDrive;
 extern motor55 arm;
 extern servo claw;
+extern servo holder;
