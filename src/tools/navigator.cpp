@@ -41,18 +41,13 @@ location navigator::locate()
     size_t ind{};
 
     double avgRot{};
+    double curRot{};
     // Begin the avg loop for each object
 
     for (size_t i{0}; i < aiVision.objectCount; ++i)
     {
         switch(static_cast<int>(id))
         {
-            case 0: case 1: case 2: case 3:
-            case 4: case 5: case 6: case 7:
-            case 8:
-                continue; // no; we dont need id 0-8, those are tables.
-                // to be honest, if we saw table id, something went wrong lol
-                // or it detected it somehow. idk
             case 9: case 16: // case 9 and 16 are equal
                 xPosOffset = 52;
                 break;
@@ -72,6 +67,8 @@ location navigator::locate()
             case 14: case 17:
                 yPosOffset = 88;
                 break;
+            default:
+                continue; // in case we pick up anything else
         }
         cenX = aiVisionObjects[i][0];
         cenY = aiVisionObjects[i][1];
@@ -81,55 +78,84 @@ location navigator::locate()
         id = aiVisionObjects[i][5];
         cenX += offset;
 
+        // get the rotation
+        switch (static_cast<int>(id))
+        {
+            // no case 0-8. We already continued out of it.
+            case 9: case 10:
+                curRot = 0;
+                break;
+            case 11: case 12: case 13: case 14:
+                curRot = 90;
+                break;
+            case 15: case 16:
+                curRot = 180;
+                break;
+            case 17: case 18: case 19: case 20: 
+                curRot = 270;
+                break;
+            default:
+                curRot = 0;
+                break;
+        }
+
         double distX{0};
         double distY{0};
-        // if center x is close to zero, then use this as the distance point.
-        if (functools::isClose(cenX, 0, 1))
+        // if width and height are pretty close to not be considered angle
+        if (!functools::isClose(width, height, 10))
         {
-            distX = sizeToDist / width;
-        }
-        else
-        // basically recenter ALL THE WAY until its close enough
-        {
-            distX = sizeToDist / width;
-            double targ{width / 2.0};
-            double leftX{cenX};
-            const double centerScreen{160.0};
-            while (!functools::isClose(leftX, centerScreen, targ))
+            if (functools::isClose(cenX, 0, 1))
             {
-                if (leftX > centerScreen)
+                distX = sizeToDist / width;
+            }
+            else
+            // basically recenter ALL THE WAY until its close enough
+            {
+                distX = sizeToDist / width;
+                double targ{width / 2.0};
+                double leftX{cenX};
+                const double centerScreen{160.0};
+                while (!functools::isClose(leftX, centerScreen, targ))
                 {
-                    leftX -= width;
-                    distY += width;
-                    if (leftX < centerScreen)
+                    if (leftX > centerScreen)
                     {
-                        leftX += width / 2.0;
-                        distY -= width / 2.0;
-                        if (leftX > centerScreen)
+                        leftX -= width;
+                        distY += width;
+                        if (leftX < centerScreen)
                         {
-                            leftX -= width / 4.0;
-                            distY += width / 4.0;
+                            leftX += width / 2.0;
+                            distY -= width / 2.0;
+                            if (leftX > centerScreen)
+                            {
+                                leftX -= width / 4.0;
+                                distY += width / 4.0;
+                            }
                         }
                     }
-                }
-                if (leftX < centerScreen)
-                {
-                    leftX += width;
-                    distY -= width;
                     if (leftX < centerScreen)
                     {
-                        leftX -= width / 2.0;
-                        distY += width / 2.0;
-                        if (leftX > centerScreen)
+                        leftX += width;
+                        distY -= width;
+                        if (leftX < centerScreen)
                         {
-                            leftX += width / 4.0;
-                            distY -= width / 4.0;
+                            leftX -= width / 2.0;
+                            distY += width / 2.0;
+                            if (leftX > centerScreen)
+                            {
+                                leftX += width / 4.0;
+                                distY -= width / 4.0;
+                            }
                         }
                     }
                 }
             }
         }
+        else
+        {
+            
+        }
 
+        avgRot += 0; //TODO THIS
         avgX += distX;
         avgY += distY;
         ++ind;
