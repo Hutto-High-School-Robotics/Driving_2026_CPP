@@ -61,4 +61,5 @@ void drive::beginManualDrive(int32_t speed) {
 
 void drive::turn(double degrees, double speed, vex::turnType dir) {
     // TODO: Turn Implementations
+    leftDrive.spin(forward, ((speed/100.0) * 12.0), volt);
 }

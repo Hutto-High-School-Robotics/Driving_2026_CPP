@@ -6,7 +6,7 @@ location navigator::locate()
 {
     // size of internal autonomous: 2 ft x 2 ft
     // we will use trig to get the location
-    double aiVisionObjects[aiVision.objectCount][5];
+    double aiVisionObjects[aiVision.objectCount][6];
     aiVision.takeSnapshot(aivision::ALL_TAGS);
     for (size_t i{0}; i < aiVision.objectCount; ++i)
     {
