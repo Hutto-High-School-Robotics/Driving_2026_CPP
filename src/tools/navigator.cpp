@@ -2,22 +2,62 @@
 
 // PROGRAM IS UNTESTED!!! USE WITH CAUTION!!!
 
+double navigator::getRotation()
+{
+    auto aiVisionObjects = GetObjects();
+    double curRot{};
+    double avgRot{};
+    size_t ind{};
+    // get the rotation
+    for (int i{}; i < 8; ++i)
+    {
+        switch (static_cast<int>(aiVisionObjects[i][5]))
+        {
+            // no case 0-8. We already continued out of it.
+            case 9: case 10:
+                curRot = 0;
+                break;
+            case 11: case 12: case 13: case 14:
+                curRot = 90;
+                break;
+            case 15: case 16:
+                curRot = 180;
+                break;
+            case 17: case 18: case 19: case 20: 
+                curRot = 270;
+                break;
+            default:
+                continue; //if it somehow snuck through???
+        }
+        // get the x and y values
+        double x1 = aiVisionObjects[i][6];
+        double x2 = aiVisionObjects[i][7];
+        double x3 = aiVisionObjects[i][8];
+        double x4 = aiVisionObjects[i][9];
+        double y1 = aiVisionObjects[i][10];
+        double y2 = aiVisionObjects[i][11];
+        double y3 = aiVisionObjects[i][12];
+        double y4 = aiVisionObjects[i][13];
+
+        double changeX = x2 - x1;
+        double changeY = y2 - y1;
+        
+        curRot += (atan2(changeY, changeX) * (180/M_PI)); // Perspective stuff???
+        // idk how to do this help
+        avgRot += curRot;
+        ++ind;
+    }
+    return avgRot / ind;
+}
+
+
+
+
 location navigator::locate()
 {
     // size of internal autonomous: 2 ft x 2 ft
     // we will use trig to get the location
-    double aiVisionObjects[aiVision.objectCount][6];
-    aiVision.takeSnapshot(aivision::ALL_TAGS);
-    for (size_t i{0}; i < aiVision.objectCount; ++i)
-    {
-        auto obj = aiVision.objects[i];
-        aiVisionObjects[i][0] = obj.centerX;
-        aiVisionObjects[i][1] = obj.centerY;
-        aiVisionObjects[i][2] = obj.width;
-        aiVisionObjects[i][3] = obj.height;
-        aiVisionObjects[i][4] = obj.angle;
-        aiVisionObjects[i][5] = obj.id;
-    }
+    auto aiVisionObjects = GetObjects();
     double avgX{};
     double avgY{};
     const double sizeToDist{2.5}; // calculated using the idea: size decreases by 2x as distance increases by 2x, so size is 1/d.
@@ -41,12 +81,14 @@ location navigator::locate()
     size_t ind{};
 
     double avgRot{};
-    double curRot{};
+
+    // get the rotation
+    avgRot = getRotation();
     // Begin the avg loop for each object
 
     for (size_t i{0}; i < aiVision.objectCount; ++i)
     {
-        switch(static_cast<int>(id))
+        switch(static_cast<int>(aiVision.objects[i].id))
         {
             case 9: case 16: // case 9 and 16 are equal
                 xPosOffset = 52;
@@ -77,27 +119,6 @@ location navigator::locate()
         angle = aiVisionObjects[i][4];
         id = aiVisionObjects[i][5];
         cenX += offset;
-
-        // get the rotation
-        switch (static_cast<int>(id))
-        {
-            // no case 0-8. We already continued out of it.
-            case 9: case 10:
-                curRot = 0;
-                break;
-            case 11: case 12: case 13: case 14:
-                curRot = 90;
-                break;
-            case 15: case 16:
-                curRot = 180;
-                break;
-            case 17: case 18: case 19: case 20: 
-                curRot = 270;
-                break;
-            default:
-                curRot = 0;
-                break;
-        }
 
         double distX{0};
         double distY{0};
@@ -152,10 +173,9 @@ location navigator::locate()
         }
         else
         {
-            
+            continue; //unimplemented.
         }
 
-        avgRot += 0; //TODO THIS
         avgX += distX;
         avgY += distY;
         ++ind;
@@ -164,5 +184,5 @@ location navigator::locate()
     avgX /= ind;
     avgY /= ind;
 
-    return location(avgX, avgY, 180.0);
+    return location(avgX, avgY, avgRot);
 }
