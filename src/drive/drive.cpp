@@ -20,11 +20,11 @@ void drive::driveLoop() {
             }
             if (Controller.ButtonR1.pressing())
             {
-                claw.setPosition(180, degrees);
+                isDown = false;
             }
             else if (Controller.ButtonR2.pressing())
             {
-                claw.setPosition(-180,degrees);
+                isDown = true;
             }
             if (Controller.ButtonLeft.pressing())
             {
@@ -42,6 +42,23 @@ void drive::driveLoop() {
             arm.stop();
         }
         vex::task::sleep(2);
+    }
+}
+
+void drive::servoLoop()
+{
+    while (true)
+    {
+        if (isDown)
+        {
+            claw.setPosition(-180,degrees);
+            wait(5, msec);
+            claw.setPosition(180,degrees);
+        }
+        else
+        {
+            claw.setPosition(180,degrees);
+        }
     }
 }
 

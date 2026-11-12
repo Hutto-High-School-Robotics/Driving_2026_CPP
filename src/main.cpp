@@ -47,6 +47,10 @@ int main() {
         drive::driveLoop();
     });
 
+    thread servoLoop = thread([]() {
+        drive::servoLoop();
+    });
+
     Brain.Screen.print("AAAAAAAAAA");
    
     while(true) {
