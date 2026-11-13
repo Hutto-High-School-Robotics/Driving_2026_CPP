@@ -14,7 +14,7 @@
 void handleLeft();
 void handleRight();
 
-int setupButtonConfig() { 
+int setupButtonConfig() {
     Controller.ButtonX.pressed([]() {
         //Autonomous::startAutonomous(); DON'T USE!!!
     });
@@ -24,11 +24,17 @@ int setupButtonConfig() {
 }
 
 void handleLeft() {
-    menu::moveMenuLeft();
+    if (drive::isPaused)
+    {
+        menu::moveMenuLeft();
+    }
 }
 
 void handleRight() {
-    menu::moveMenuRight();
+    if (drive::isPaused)
+    {
+        menu::moveMenuRight();
+    }
 }
 
 int main() {
@@ -41,8 +47,12 @@ int main() {
         drive::driveLoop();
     });
 
+    thread servoLoop = thread([]() {
+        drive::servoLoop();
+    });
+
     Brain.Screen.print("AAAAAAAAAA");
-   
+
     while(true) {
         // Allow other tasks to run
         vex::this_thread::sleep_for(10);

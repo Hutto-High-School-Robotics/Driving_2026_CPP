@@ -1,6 +1,6 @@
 #include "location.h"
 
-location::location(double x, double y, double rotationDegs) : X(x), Y(y), rotation(rotationDegs)
+location::location(double x, double y, double rotationDegrees) : X(x), Y(y), rotation(rotationDegrees)
 {
     isDegrees = true;
 }

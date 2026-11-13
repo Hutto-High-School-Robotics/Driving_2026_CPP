@@ -11,12 +11,10 @@ namespace Autonomous
         bool isInMenu;
         bool abort;
         bool isInAutonomous;
-        void SetupMenu();
-        void UpdateMenu();
+        void setupMenu();
+        void updateMenu();
     };
-    namespace internalNavigation
-    {
-    };
+    bool isInDangerZone(location current);
     void startAutonomous();
     void selectAutonomous();
     void cancelMenu();
