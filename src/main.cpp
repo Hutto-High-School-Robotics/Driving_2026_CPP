@@ -14,12 +14,33 @@
 void handleLeft();
 void handleRight();
 
+thread autonomous = thread();
+
 int setupButtonConfig() {
     Controller.ButtonX.pressed([]() {
-        //Autonomous::startAutonomous(); DON'T USE!!!
+        wait(1, sec);
+        if (Controller.ButtonX.pressing() && !Autonomous::isAutonomous())
+        {
+            autonomous = thread([]() {
+                Controller.Screen.clearScreen();
+                Controller.Screen.setCursor(1,1);
+                Controller.Screen.print("PUT CONTROLLER");
+                Controller.Screen.setCursor(2,1);
+                Controller.Screen.print("DOWN NOW");
+                wait(2,sec);
+                Autonomous::startAutonomous(); // * USE!!!
+            });
+        }
     });
     Controller.ButtonRight.pressed(handleRight);
     Controller.ButtonLeft.pressed(handleLeft);
+    Controller.ButtonB.pressed([]() {
+        if (Autonomous::isAutonomous())
+        {
+            autonomous.interrupt();
+            Autonomous::postCancel();
+        }
+    });
     return 0;
 }
 

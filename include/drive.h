@@ -9,16 +9,32 @@ namespace drive
         bool isPaused;
         bool isClawDown;
         bool isClawClosed;
-        bool isClawDoneClose;
     }
     void stabilizeClaw();
     void driveLoop();
     void pauseDrive();
     void unpauseDrive();
-    void beginManualDrive(int32_t speed);
+    void beginManualDrive(double speed);
     void stopManualDrive();
     void turn(double degrees, double speed = 50, vex::turnType dir = right);
     void turn(vex::turnType dir, double time, timeUnits unit);
+
+    // manual arm control
+    void raiseArm();
+    void lowerArm();
+    void stopArm();
+
+    // manual claw control
+    void openClaw();
+
+    void closeClaw();
+
+
+    void openHolder();
+
+    void closeHolder();
+
+
     void servoLoop();
     // driving
 

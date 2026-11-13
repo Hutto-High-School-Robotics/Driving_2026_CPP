@@ -1,8 +1,10 @@
 #include "drive.h"
 #include "navigator.h"
+#include "autonomous.h"
 
 void drive::driveLoop()
 {
+    isClawClosed = true;
     thread finger = thread(servoLoop);
     thread driving = thread(train);
     thread armControl = thread(armRun);
@@ -20,8 +22,11 @@ void drive::train()
         }
         else
         {
-            leftDrive.stop();
-            rightDrive.stop();
+            if (!Autonomous::isAutonomous())
+            {
+                leftDrive.stop();
+                rightDrive.stop();
+            }
         }
         vex::task::sleep(5);
     }
@@ -48,7 +53,10 @@ void drive::armRun()
         }
         else
         {
-            arm.stop();
+            if (!Autonomous::isAutonomous())
+            {
+                arm.stop();
+            }
         }
         vex::task::sleep(5);
     }
@@ -130,7 +138,7 @@ void drive::servoLoop()
         if (isClawDown)
         {
             timer = 1000;
-            claw.setPosition(-180,degrees);
+            claw.setPosition(-50,degrees);
             while (timer > 0)
             {
                 wait(5,msec);
@@ -140,7 +148,7 @@ void drive::servoLoop()
                     break;
                 }
             }
-            if (!isClawDown) claw.setPosition(0,degrees); else continue;
+            if (isClawDown) claw.setPosition(50,degrees); else continue;
             wait(5, msec);
         }
         else
@@ -159,11 +167,17 @@ void drive::unpauseDrive() {
     isPaused = false;
 }
 
-void drive::beginManualDrive(int32_t speed) {
-    if (speed <= 100 || speed >= 0) {
-        leftDrive.spin(forward, ((double) speed / 100) * 12.0, volt);
-        rightDrive.spin(forward, ((double) speed / 100) * 12.0, volt);
+void drive::beginManualDrive(double speed) {
+    if (speed <= 100 && speed >= -100) {
+        leftDrive.spin(forward, (speed / 100.0) * 12.0, volt);
+        rightDrive.spin(forward, (speed / 100.0) * 12.0, volt);
     }
+}
+
+void drive::stopManualDrive()
+{
+    leftDrive.stop();
+    rightDrive.stop();
 }
 
 /**
@@ -177,10 +191,50 @@ void drive::turn(double degrees, double speed, vex::turnType dir) {
 void drive::turn(vex::turnType dir, double time, timeUnits unit) {
     if (dir == right)
     {
-        leftDrive.spin(forward,6.0,volt);
-        rightDrive.spin(reverse,6.0,volt);
+        leftDrive.spin(forward,2.0,volt);
+        rightDrive.spin(reverse,2.0,volt);
+    }
+    else if (dir == left)
+    {
+        leftDrive.spin(forward,2.0,volt);
+        rightDrive.spin(reverse,2.0,volt);
     }
     wait(time, unit);
     leftDrive.stop();
     rightDrive.stop();
+}
+
+void drive::raiseArm()
+{
+    arm.spin(forward, 12.0, volt);
+}
+
+void drive::lowerArm()
+{
+    arm.spin(reverse, 12.0, volt);
+}
+
+void drive::stopArm()
+{
+    arm.stop();
+}
+
+void drive::openClaw()
+{
+    isClawDown = false;
+}
+
+void drive::closeClaw()
+{
+    isClawDown = true;
+}
+
+void drive::openHolder()
+{
+    isClawClosed = false;
+}
+
+void drive::closeHolder()
+{
+    isClawClosed = true;
 }

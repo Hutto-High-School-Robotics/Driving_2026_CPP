@@ -16,10 +16,11 @@ namespace Autonomous
     };
     bool isInDangerZone(location current);
     void startAutonomous();
-    void selectAutonomous();
+    bool isAutonomous();
     void cancelMenu();
     void moveMenuRight();
     void moveMenuLeft();
     bool inMenu();
+    void postCancel();
     bool seesFiducial(int fiducial[]);
 };
