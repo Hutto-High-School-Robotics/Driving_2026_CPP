@@ -23,6 +23,7 @@ void drive::train()
             leftDrive.stop();
             rightDrive.stop();
         }
+        vex::task::sleep(5);
     }
 }
 
@@ -49,6 +50,7 @@ void drive::armRun()
         {
             arm.stop();
         }
+        vex::task::sleep(5);
     }
 }
 
@@ -67,6 +69,7 @@ void drive::clawRun()
                 isClawDown = true;
             }
         }
+        vex::task::sleep(5);
     }
 }
 
@@ -91,6 +94,7 @@ void drive::holderRun()
                 stabilizeClaw();
             }
         }
+        vex::task::sleep(5);
     }
 }
 
@@ -143,6 +147,7 @@ void drive::servoLoop()
         {
             claw.setPosition(50,degrees);
         }
+        vex::task::sleep(5);
     }
 }
 
