@@ -15,10 +15,12 @@ namespace Autonomous
         void updateMenu();
     };
     bool isInDangerZone(location current);
-    void startAutonomous();
-    void selectAutonomous();
+    void startAutonomous(vex::turnType dir);
+    bool isAutonomous();
     void cancelMenu();
     void moveMenuRight();
     void moveMenuLeft();
     bool inMenu();
+    void postCancel();
+    bool seesFiducial(int fiducial[]);
 };

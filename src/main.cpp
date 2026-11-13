@@ -10,31 +10,37 @@
 #include "autonomous.h"
 #include "tools.h"
 
-// declare functions before calling them
-void handleLeft();
-void handleRight();
+thread autonomous = thread();
 
 int setupButtonConfig() {
     Controller.ButtonX.pressed([]() {
-        //Autonomous::startAutonomous(); DON'T USE!!!
+        wait(1, sec);
+        if (Controller.ButtonX.pressing() && !Autonomous::isAutonomous())
+        {
+            autonomous = thread([]() {
+                Controller.Screen.clearScreen();
+                Controller.Screen.setCursor(1,1);
+                Controller.Screen.print("HOLD DIR OF");
+                Controller.Screen.setCursor(2,1);
+                Controller.Screen.print("FIDUCIAL NOW");
+                Controller.Screen.setCursor(3,1);
+                Controller.Screen.print("DEFAULT: RIGHT");
+                wait(2,sec);
+                if (Controller.ButtonLeft.pressing())
+                    Autonomous::startAutonomous(left); // * USE!!!
+                else
+                    Autonomous::startAutonomous(right);
+            });
+        }
     });
-    Controller.ButtonRight.pressed(handleRight);
-    Controller.ButtonLeft.pressed(handleLeft);
+    Controller.ButtonB.pressed([]() {
+        if (Autonomous::isAutonomous())
+        {
+            autonomous.interrupt();
+            Autonomous::postCancel();
+        }
+    });
     return 0;
-}
-
-void handleLeft() {
-    if (drive::isPaused)
-    {
-        menu::moveMenuLeft();
-    }
-}
-
-void handleRight() {
-    if (drive::isPaused)
-    {
-        menu::moveMenuRight();
-    }
 }
 
 int main() {
@@ -46,12 +52,6 @@ int main() {
     thread driveLoop = thread([]() {
         drive::driveLoop();
     });
-
-    thread servoLoop = thread([]() {
-        drive::servoLoop();
-    });
-
-    Brain.Screen.print("AAAAAAAAAA");
 
     while(true) {
         // Allow other tasks to run
