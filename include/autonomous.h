@@ -15,7 +15,7 @@ namespace Autonomous
         void updateMenu();
     };
     bool isInDangerZone(location current);
-    void startAutonomous();
+    void startAutonomous(vex::turnType dir);
     bool isAutonomous();
     void cancelMenu();
     void moveMenuRight();

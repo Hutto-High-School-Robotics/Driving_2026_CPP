@@ -5,7 +5,7 @@ bool Autonomous::inMenu() {
     return isInMenu;
 }
 
-void Autonomous::startAutonomous() {
+void Autonomous::startAutonomous(vex::turnType dir) {
     isInAutonomous = true;
     drive::pauseDrive();
     //menu::enterMenu();
@@ -16,7 +16,7 @@ void Autonomous::startAutonomous() {
     drive::beginManualDrive(50);
     wait(1,sec);
     drive::stopManualDrive();
-    drive::turn(right, 0.9, sec);
+    drive::turn((dir == right ? right : left), 0.9, sec);
     drive::beginManualDrive(50);
     wait(.75,sec);
     drive::stopManualDrive();
@@ -29,7 +29,7 @@ void Autonomous::startAutonomous() {
     drive::beginManualDrive(-50);
     wait(.75, sec);
     drive::stopManualDrive();
-    drive::turn(left, 0.9, sec);
+    drive::turn((dir == right ? left : right), 0.9, sec);
     drive::beginManualDrive(-50);
     wait(1, sec);
     drive::stopManualDrive();

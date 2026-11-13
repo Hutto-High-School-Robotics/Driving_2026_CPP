@@ -196,8 +196,8 @@ void drive::turn(vex::turnType dir, double time, timeUnits unit) {
     }
     else if (dir == left)
     {
-        leftDrive.spin(forward,2.0,volt);
-        rightDrive.spin(reverse,2.0,volt);
+        leftDrive.spin(reverse,2.0,volt);
+        rightDrive.spin(forward,2.0,volt);
     }
     wait(time, unit);
     leftDrive.stop();

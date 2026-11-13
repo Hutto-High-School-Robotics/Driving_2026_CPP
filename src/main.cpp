@@ -10,10 +10,6 @@
 #include "autonomous.h"
 #include "tools.h"
 
-// declare functions before calling them
-void handleLeft();
-void handleRight();
-
 thread autonomous = thread();
 
 int setupButtonConfig() {
@@ -24,16 +20,19 @@ int setupButtonConfig() {
             autonomous = thread([]() {
                 Controller.Screen.clearScreen();
                 Controller.Screen.setCursor(1,1);
-                Controller.Screen.print("PUT CONTROLLER");
+                Controller.Screen.print("HOLD DIR OF");
                 Controller.Screen.setCursor(2,1);
-                Controller.Screen.print("DOWN NOW");
+                Controller.Screen.print("FIDUCIAL NOW");
+                Controller.Screen.setCursor(3,1);
+                Controller.Screen.print("DEFAULT: RIGHT");
                 wait(2,sec);
-                Autonomous::startAutonomous(); // * USE!!!
+                if (Controller.ButtonLeft.pressing())
+                    Autonomous::startAutonomous(left); // * USE!!!
+                else
+                    Autonomous::startAutonomous(right);
             });
         }
     });
-    Controller.ButtonRight.pressed(handleRight);
-    Controller.ButtonLeft.pressed(handleLeft);
     Controller.ButtonB.pressed([]() {
         if (Autonomous::isAutonomous())
         {
@@ -42,20 +41,6 @@ int setupButtonConfig() {
         }
     });
     return 0;
-}
-
-void handleLeft() {
-    if (drive::isPaused)
-    {
-        menu::moveMenuLeft();
-    }
-}
-
-void handleRight() {
-    if (drive::isPaused)
-    {
-        menu::moveMenuRight();
-    }
 }
 
 int main() {
