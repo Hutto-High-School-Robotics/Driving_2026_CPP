@@ -4,6 +4,7 @@
 
 namespace drive
 {
+    const double driveBias[] {11.5, 12.0};
     namespace
     {
         bool isPaused;

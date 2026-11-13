@@ -17,8 +17,8 @@ void drive::train()
     while (true) {
         if (!isPaused)
         {
-            leftDrive.spin(forward, 12.0 * (static_cast<double>(Controller.Axis3.position())) / 100.0, volt);
-            rightDrive.spin(forward, 12.0 * (static_cast<double>(Controller.Axis2.position())) / 100.0, volt);
+            leftDrive.spin(forward, driveBias[0] * (static_cast<double>(Controller.Axis3.position())) / 100.0, volt);
+            rightDrive.spin(forward, driveBias[1] * (static_cast<double>(Controller.Axis2.position())) / 100.0, volt);
         }
         else
         {
@@ -169,8 +169,8 @@ void drive::unpauseDrive() {
 
 void drive::beginManualDrive(double speed) {
     if (speed <= 100 && speed >= -100) {
-        leftDrive.spin(forward, (speed / 100.0) * 12.0, volt);
-        rightDrive.spin(forward, (speed / 100.0) * 12.0, volt);
+        leftDrive.spin(forward, (speed / 100.0) * driveBias[0], volt);
+        rightDrive.spin(forward, (speed / 100.0) * driveBias[1], volt);
     }
 }
 
@@ -191,13 +191,13 @@ void drive::turn(double degrees, double speed, vex::turnType dir) {
 void drive::turn(vex::turnType dir, double time, timeUnits unit) {
     if (dir == right)
     {
-        leftDrive.spin(forward,2.0,volt);
-        rightDrive.spin(reverse,2.0,volt);
+        leftDrive.spin(forward,(driveBias[0]/6.0),volt);
+        rightDrive.spin(reverse,(driveBias[1]/6.0),volt);
     }
     else if (dir == left)
     {
-        leftDrive.spin(reverse,2.0,volt);
-        rightDrive.spin(forward,2.0,volt);
+        leftDrive.spin(reverse,(driveBias[0]/6.0),volt);
+        rightDrive.spin(forward,(driveBias[1]/6.0),volt);
     }
     wait(time, unit);
     leftDrive.stop();

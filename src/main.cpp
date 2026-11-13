@@ -18,6 +18,7 @@ int setupButtonConfig() {
         if (Controller.ButtonX.pressing() && !Autonomous::isAutonomous())
         {
             autonomous = thread([]() {
+                drive::pauseDrive();
                 Controller.Screen.clearScreen();
                 Controller.Screen.setCursor(1,1);
                 Controller.Screen.print("HOLD DIR OF");
