@@ -6,7 +6,7 @@ namespace menu
     {
         bool inMenu = false;
         int selectedFiducial = 1;
-        
+
         /**
          * This function internally sets up the menu
          */
@@ -70,7 +70,7 @@ namespace menu
             }
         }
     }
-    
+
     /**
      * Moves the menu left
      */

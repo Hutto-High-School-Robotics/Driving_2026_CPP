@@ -14,7 +14,7 @@
 void handleLeft();
 void handleRight();
 
-int setupButtonConfig() { 
+int setupButtonConfig() {
     Controller.ButtonX.pressed([]() {
         //Autonomous::startAutonomous(); DON'T USE!!!
     });
@@ -52,7 +52,7 @@ int main() {
     });
 
     Brain.Screen.print("AAAAAAAAAA");
-   
+
     while(true) {
         // Allow other tasks to run
         vex::this_thread::sleep_for(10);

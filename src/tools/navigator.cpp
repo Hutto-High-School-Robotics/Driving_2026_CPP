@@ -23,7 +23,7 @@ double navigator::getRotation()
             case 15: case 16:
                 curRot = 180;
                 break;
-            case 17: case 18: case 19: case 20: 
+            case 17: case 18: case 19: case 20:
                 curRot = 270;
                 break;
             default:
@@ -41,7 +41,7 @@ double navigator::getRotation()
 
         double changeX = x2 - x1;
         double changeY = y2 - y1;
-        
+
         curRot += (atan2(changeY, changeX) * (180/M_PI)); // Perspective stuff???
         // idk how to do this help
         avgRot += curRot;
@@ -77,7 +77,7 @@ location navigator::locate()
     TODO:
     GET PROPER FIELD MEASUREMENTS
     */
-   
+
     size_t ind{};
 
     double avgRot{};
@@ -123,9 +123,9 @@ location navigator::locate()
         double distX{0};
         double distY{0};
         // if width and height are pretty close to not be considered angle
-        if (!functools::isClose(width, height, 10))
+        if (!func_tools::isClose(width, height, 10))
         {
-            if (functools::isClose(cenX, 0, 1))
+            if (func_tools::isClose(cenX, 0, 1))
             {
                 distX = sizeToDist / width;
             }
@@ -136,7 +136,7 @@ location navigator::locate()
                 double targ{width / 2.0};
                 double leftX{cenX};
                 const double centerScreen{160.0};
-                while (!functools::isClose(leftX, centerScreen, targ))
+                while (!func_tools::isClose(leftX, centerScreen, targ))
                 {
                     if (leftX > centerScreen)
                     {
