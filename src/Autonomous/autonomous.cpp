@@ -7,8 +7,12 @@ bool Autonomous::inMenu() {
 
 void Autonomous::startAutonomous() {
     drive::pauseDrive();
-    menu::enterMenu();
-    Brain.Screen.print(navigator::locate().X);
+    //menu::enterMenu();
+    //Brain.Screen.print(navigator::locate().X);
+    drive::beginManualDrive(10);
+    wait(1,sec);
+    drive::stopManualDrive();
+    drive::turn(right, 1.5, sec);
 }
 
 bool Autonomous::isInDangerZone(location current)

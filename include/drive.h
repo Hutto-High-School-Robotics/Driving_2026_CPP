@@ -15,5 +15,6 @@ namespace drive
     void beginManualDrive(int32_t speed);
     void stopManualDrive();
     void turn(double degrees, double speed = 50, vex::turnType dir = right);
+    void turn(vex::turnType dir, double time, timeUnits unit);
     void servoLoop();
 };

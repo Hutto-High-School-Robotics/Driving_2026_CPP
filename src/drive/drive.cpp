@@ -47,13 +47,24 @@ void drive::driveLoop() {
 
 void drive::servoLoop()
 {
+    int16_t timer = 1000;
     while (true)
     {
         if (isDown)
         {
+            timer = 1000;
             claw.setPosition(-180,degrees);
+            while (timer > 0)
+            {
+                wait(5,msec);
+                timer -= 5;
+                if (!isDown) // abort it if it turns into up
+                {
+                    break;
+                }
+            }
+            if (!isDown) claw.setPosition(180,degrees); else continue;
             wait(5, msec);
-            claw.setPosition(180,degrees);
         }
         else
         {
@@ -77,6 +88,21 @@ void drive::beginManualDrive(int32_t speed) {
     }
 }
 
+/**
+ * ! DO NOT USE !
+ * ! BROKEN FUNCTIONALITY !
+ */
 void drive::turn(double degrees, double speed, vex::turnType dir) {
     leftDrive.spin(forward, ((speed/100.0) * 12.0), volt);
+}
+
+void drive::turn(vex::turnType dir, double time, timeUnits unit) {
+    if (dir == right)
+    {
+        leftDrive.spin(forward,6.0,volt);
+        rightDrive.spin(reverse,6.0,volt);
+    }
+    wait(time, unit);
+    leftDrive.stop();
+    rightDrive.stop();
 }
