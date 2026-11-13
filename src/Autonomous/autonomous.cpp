@@ -15,6 +15,12 @@ void Autonomous::startAutonomous() {
     drive::turn(right, 1.5, sec);
 }
 
+bool Autonomous::seesFiducial(int fiducial[])
+{
+    aiVision.takeSnapshot(aivision::ALL_TAGS);
+    return false;
+}
+
 bool Autonomous::isInDangerZone(location current)
 {
     double sizeLists[2][3] {

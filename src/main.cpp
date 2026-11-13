@@ -47,12 +47,6 @@ int main() {
         drive::driveLoop();
     });
 
-    thread servoLoop = thread([]() {
-        drive::servoLoop();
-    });
-
-    Brain.Screen.print("AAAAAAAAAA");
-
     while(true) {
         // Allow other tasks to run
         vex::this_thread::sleep_for(10);

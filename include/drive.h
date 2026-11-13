@@ -7,8 +7,11 @@ namespace drive
     namespace
     {
         bool isPaused;
-        bool isDown;
+        bool isClawDown;
+        bool isClawClosed;
+        bool isClawDoneClose;
     }
+    void clawLoop();
     void driveLoop();
     void pauseDrive();
     void unpauseDrive();
@@ -17,4 +20,5 @@ namespace drive
     void turn(double degrees, double speed = 50, vex::turnType dir = right);
     void turn(vex::turnType dir, double time, timeUnits unit);
     void servoLoop();
+    void gradualServo(double start, double end, vex::servo& s);
 };

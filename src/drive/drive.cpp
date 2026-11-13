@@ -2,6 +2,12 @@
 #include "navigator.h"
 
 void drive::driveLoop() {
+    thread finger = thread([]() {
+        servoLoop();
+    });
+    thread claw = thread([]() {
+        clawLoop();
+    });
     while (true) {
         if (!isPaused) {
             leftDrive.spin(forward, 12.0 * (static_cast<double>(Controller.Axis3.position())) / 100.0, volt);
@@ -20,19 +26,21 @@ void drive::driveLoop() {
             }
             if (Controller.ButtonR1.pressing())
             {
-                isDown = false;
+                isClawDown = false;
+                isClawDoneClose = false;
             }
             else if (Controller.ButtonR2.pressing())
             {
-                isDown = true;
+                isClawDown = true;
+                isClawDoneClose = false;
             }
             if (Controller.ButtonLeft.pressing())
             {
-                holder.setPosition(0,degrees);
+                isClawClosed = true;
             }
             else if(Controller.ButtonRight.pressing())
             {
-                holder.setPosition(45,degrees);
+                isClawClosed = false;
             }
         }
         else
@@ -45,30 +53,83 @@ void drive::driveLoop() {
     }
 }
 
+void drive::clawLoop()
+{
+    while (true)
+    {
+        if (isClawClosed & !isClawDoneClose)
+        {
+            double curPos{50};
+            double changePerLoop{-50.0 / 100.0};
+            for (int i{}; i < 100; ++i)
+            {
+                curPos += changePerLoop;
+                holder.setPosition(curPos, degrees);
+                wait(20, msec);
+                if (!isClawClosed)
+                {
+                    isClawDoneClose = false;
+                    break;
+                }
+            }
+            if (isClawClosed)
+            {
+                holder.setPosition(0,degrees);
+                isClawDoneClose = true;
+            }
+        }
+        else if (!isClawClosed & !isClawDoneClose)
+        {
+            double curPos{50};
+            double changePerLoop{50.0 / 100.0};
+            for (int i{}; i < 100; ++i)
+            {
+                curPos += changePerLoop;
+                holder.setPosition(curPos, degrees);
+                wait(20, msec);
+                if (isClawClosed)
+                {
+                    isClawDoneClose = false;
+                    break;
+                }
+            }
+            if (!isClawClosed)
+            {
+                holder.setPosition(0,degrees);
+                isClawDoneClose = true;
+            }
+        }
+    }
+}
+
+void drive::gradualServo(double start, double end, vex::servo& s)
+{
+}
+
 void drive::servoLoop()
 {
     int16_t timer = 1000;
     while (true)
     {
-        if (isDown)
+        if (isClawDown)
         {
             timer = 1000;
-            claw.setPosition(-180,degrees);
+            claw.setPosition(-50,degrees);
             while (timer > 0)
             {
                 wait(5,msec);
                 timer -= 5;
-                if (!isDown) // abort it if it turns into up
+                if (!isClawDown) // abort it if it turns into up
                 {
                     break;
                 }
             }
-            if (!isDown) claw.setPosition(180,degrees); else continue;
+            if (!isClawDown) claw.setPosition(50,degrees); else continue;
             wait(5, msec);
         }
         else
         {
-            claw.setPosition(180,degrees);
+            claw.setPosition(50,degrees);
         }
     }
 }

@@ -21,4 +21,5 @@ namespace Autonomous
     void moveMenuRight();
     void moveMenuLeft();
     bool inMenu();
+    bool seesFiducial(int fiducial[]);
 };
