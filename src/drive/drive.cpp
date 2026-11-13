@@ -1,14 +1,37 @@
 #include "drive.h"
 #include "navigator.h"
 
-void drive::driveLoop() {
-    thread finger = thread([]() {
-        servoLoop();
-    });
+void drive::driveLoop()
+{
+    thread finger = thread(servoLoop);
+    thread driving = thread(train);
+    thread armControl = thread(armRun);
+    thread clawControl = thread(clawRun);
+    thread holderControl = thread(holderRun);
+}
+
+void drive::train()
+{
     while (true) {
-        if (!isPaused) {
+        if (!isPaused)
+        {
             leftDrive.spin(forward, 12.0 * (static_cast<double>(Controller.Axis3.position())) / 100.0, volt);
             rightDrive.spin(forward, 12.0 * (static_cast<double>(Controller.Axis2.position())) / 100.0, volt);
+        }
+        else
+        {
+            leftDrive.stop();
+            rightDrive.stop();
+        }
+    }
+}
+
+void drive::armRun()
+{
+    while (true)
+    {
+        if (!isPaused)
+        {
             if (Controller.ButtonL1.pressing())
             {
                 arm.spin(forward, 12.0, volt);
@@ -21,6 +44,20 @@ void drive::driveLoop() {
             {
                 arm.stop();
             }
+        }
+        else
+        {
+            arm.stop();
+        }
+    }
+}
+
+void drive::clawRun()
+{
+    while (true)
+    {
+        if (!isPaused)
+        {
             if (Controller.ButtonR1.pressing())
             {
                 isClawDown = false;
@@ -29,6 +66,16 @@ void drive::driveLoop() {
             {
                 isClawDown = true;
             }
+        }
+    }
+}
+
+void drive::holderRun()
+{
+    while (true)
+    {
+        if (!isPaused)
+        {
             if (Controller.ButtonLeft.pressing())
             {
                 isClawClosed = true;
@@ -44,13 +91,6 @@ void drive::driveLoop() {
                 stabilizeClaw();
             }
         }
-        else
-        {
-            leftDrive.stop();
-            rightDrive.stop();
-            arm.stop();
-        }
-        vex::task::sleep(2);
     }
 }
 
