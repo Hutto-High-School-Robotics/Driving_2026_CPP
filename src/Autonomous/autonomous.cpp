@@ -1,31 +1,33 @@
 #include "autonomous.h"
 #include "navigator.h"
 
-bool Autonomous::inMenu() {
+bool Autonomous::inMenu()
+{
     return isInMenu;
 }
 
-void Autonomous::startAutonomous(vex::turnType dir) {
+void Autonomous::startAutonomous(vex::turnType dir)
+{
     isInAutonomous = true;
     drive::pauseDrive();
-    //menu::enterMenu();
-    //Brain.Screen.print(navigator::locate().X);
+    // menu::enterMenu();
+    // Brain.Screen.print(navigator::locate().X);
     drive::raiseArm();
     wait(3, sec);
     drive::stopArm();
     drive::beginManualDrive(25);
-    wait(4,sec);
+    wait(4, sec);
     drive::stopManualDrive();
     drive::turn((dir == right ? right : left), 0.9, sec);
     drive::beginManualDrive(25);
-    wait(1.5,sec);
+    wait(1.5, sec);
     drive::stopManualDrive();
     drive::lowerArm();
     wait(2, sec);
     drive::stopArm();
     drive::openClaw();
     drive::openHolder();
-    wait(0.5,sec);
+    wait(0.5, sec);
     drive::beginManualDrive(-25);
     wait(1.5, sec);
     drive::stopManualDrive();
@@ -56,10 +58,9 @@ bool Autonomous::seesFiducial(int fiducial[])
 
 bool Autonomous::isInDangerZone(location current)
 {
-    double sizeLists[2][3] {
+    double sizeLists[2][3]{
         {0, 1, 2},
-        {3, 4, 5}
-    };
+        {3, 4, 5}};
     for (size_t i{}; i < 2; ++i)
     {
         bool isX = i == 1;

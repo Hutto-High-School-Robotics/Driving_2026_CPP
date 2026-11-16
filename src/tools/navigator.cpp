@@ -1,4 +1,5 @@
 #include "navigator.h"
+#include "AprilTagLocation.h"
 
 // PROGRAM IS UNTESTED!!! USE WITH CAUTION!!!
 
@@ -13,21 +14,29 @@ double navigator::getRotation()
     {
         switch (static_cast<int>(aiVisionObjects[i][5]))
         {
-            // no case 0-8. We already continued out of it.
-            case 9: case 10:
-                curRot = 0;
-                break;
-            case 11: case 12: case 13: case 14:
-                curRot = 90;
-                break;
-            case 15: case 16:
-                curRot = 180;
-                break;
-            case 17: case 18: case 19: case 20:
-                curRot = 270;
-                break;
-            default:
-                continue; //if it somehow snuck through???
+        // no case 0-8. We already continued out of it.
+        case 9:
+        case 10:
+            curRot = 0;
+            break;
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+            curRot = 90;
+            break;
+        case 15:
+        case 16:
+            curRot = 180;
+            break;
+        case 17:
+        case 18:
+        case 19:
+        case 20:
+            curRot = 270;
+            break;
+        default:
+            continue; // if it somehow snuck through???
         }
         // get the x and y values
         double x1 = aiVisionObjects[i][6];
@@ -42,16 +51,13 @@ double navigator::getRotation()
         double changeX = x2 - x1;
         double changeY = y2 - y1;
 
-        curRot += (atan2(changeY, changeX) * (180/M_PI)); // Perspective stuff???
+        curRot += (atan2(changeY, changeX) * (180 / M_PI)); // Perspective stuff???
         // idk how to do this help
         avgRot += curRot;
         ++ind;
     }
     return avgRot / ind;
 }
-
-
-
 
 location navigator::locate()
 {
@@ -88,29 +94,35 @@ location navigator::locate()
 
     for (size_t i{0}; i < aiVision.objectCount; ++i)
     {
-        switch(static_cast<int>(aiVision.objects[i].id))
+        switch (static_cast<int>(aiVision.objects[i].id))
         {
-            case 9: case 16: // case 9 and 16 are equal
-                xPosOffset = 52;
-                break;
-            case 10: case 15: // case 10 and 15 are equal too
-                xPosOffset = 70;
-                break;
-            // wall 2
-            case 11: case 20:
-                yPosOffset = 16;
-                break;
-            case 12: case 19:
-                yPosOffset = 52;
-                break;
-            case 13: case 18:
-                yPosOffset = 70;
-                break;
-            case 14: case 17:
-                yPosOffset = 88;
-                break;
-            default:
-                continue; // in case we pick up anything else
+        case 9:
+        case 16: // case 9 and 16 are equal
+            xPosOffset = 52;
+            break;
+        case 10:
+        case 15: // case 10 and 15 are equal too
+            xPosOffset = 70;
+            break;
+        // wall 2
+        case 11:
+        case 20:
+            yPosOffset = 16;
+            break;
+        case 12:
+        case 19:
+            yPosOffset = 52;
+            break;
+        case 13:
+        case 18:
+            yPosOffset = 70;
+            break;
+        case 14:
+        case 17:
+            yPosOffset = 88;
+            break;
+        default:
+            continue; // in case we pick up anything else
         }
         cenX = aiVisionObjects[i][0];
         cenY = aiVisionObjects[i][1];
@@ -173,7 +185,7 @@ location navigator::locate()
         }
         else
         {
-            continue; //unimplemented.
+            continue; // unimplemented.
         }
 
         avgX += distX;
