@@ -12,8 +12,10 @@
 
 thread autonomous = thread();
 
-int setupButtonConfig() {
-    Controller.ButtonX.pressed([]() {
+int setupButtonConfig()
+{
+    Controller.ButtonX.pressed([]()
+                               {
         wait(1, sec);
         if (Controller.ButtonX.pressing() && !Autonomous::isAutonomous())
         {
@@ -32,29 +34,30 @@ int setupButtonConfig() {
                 else
                     Autonomous::startAutonomous(right);
             });
-        }
-    });
-    Controller.ButtonB.pressed([]() {
+        } });
+    Controller.ButtonB.pressed([]()
+                               {
         if (Autonomous::isAutonomous())
         {
             autonomous.interrupt();
             Autonomous::postCancel();
-        }
-    });
+        } });
     return 0;
 }
 
-int main() {
-    if (setupButtonConfig() == 0) {
+int main()
+{
+    if (setupButtonConfig() == 0)
+    {
         Brain.Screen.print("WE ARE GOOD");
     }
     Brain.Screen.newLine();
     Brain.Screen.print("Hello V5");
-    thread driveLoop = thread([]() {
-        drive::driveLoop();
-    });
+    thread driveLoop = thread([]()
+                              { drive::driveLoop(); });
 
-    while(true) {
+    while (true)
+    {
         // Allow other tasks to run
         vex::this_thread::sleep_for(10);
     }
